@@ -3,6 +3,13 @@ import iconArrow from './images/icon-arrow.svg'
 
 function App() {
 
+  function getDate() {
+    const date = Date.now()
+    console.log(date);
+  }
+
+  getDate()
+
   return (
     <>
     <div className="container">
