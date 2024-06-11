@@ -42,14 +42,16 @@ const dayError = () =>{
     setDayError('Field is required')
   } else if(dayInput > 31){
     setDayError('Must be a valid day')
+  } else if((monthInput == 4 || monthInput == 6 || monthInput == 9 || monthInput == 11) && dayInput > 30){
+    setDayError("April cant be gretaer than 31 days")
   }
 }
 
-// const monthError = () =>{
-//   if (condition) {
-    
-//   }
-// }
+const monthError = () =>{
+  if (monthInput > 12 || monthError < 1) {
+    setMonthError('Must be a valid month')
+  }
+}
 
 
 const yearError = ()=>{
@@ -66,6 +68,7 @@ const onSubmit = () => {
   // } else {
   //   setError("");
     dayError();
+    monthError()
     yearError()
     getDate();
   }
