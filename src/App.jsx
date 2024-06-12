@@ -115,20 +115,25 @@ const onSubmit = () => {
         onClick={onSubmit}
         />
       </div>
-     {
        <div style={{
         color: 'hsl(0, 0%, 8%)',
         textAlign: 'start',
         fontSize: '25px',
         fontWeight: 800,
       }} className='reveal-date'>
-        <p>
-          <span style={style}>
-            {yearInput ? (year-yearInput) : '--'}
-            </span>
-            {(year-yearInput) > 1 ?  'years' : 'year'}
-            </p>
-        <p>
+       <div>
+        { (!day_error || !month_error || !year_error) ?
+         <p>
+            <span style={style}>
+              {yearInput ? (year-yearInput) : '--'}
+              </span>
+              {(year-yearInput) > 1 ?  'years' : 'year'}
+              </p> : <p>
+                <span style={style}>--</span>
+                year
+                </p>}
+       </div>
+       <p>
           <span style={style}>
             {monthInput ? (month -monthInput):'--'}
             </span>{(month-monthInput) > 1 ?  'months' : 'month'}
@@ -140,7 +145,6 @@ const onSubmit = () => {
           {(day - dayInput === 1) ? ' day' : ' days'}
         </p>
       </div>
-     }
     </div>
     </>
   )
