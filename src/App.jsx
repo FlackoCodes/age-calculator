@@ -23,6 +23,7 @@ const dateObj = {
   year: today.getFullYear(),
 };
 
+const { day, month, year} = dateObj;
 
 const getDate = () => {
 
@@ -42,7 +43,7 @@ const dayError = () =>{
   } else if(dayInput > 31){
     setDayError('Must be a valid day')
   } else if((monthInput == 4 || monthInput == 6 || monthInput == 9 || monthInput == 11) && dayInput > 30){
-    setDayError("April cant be gretaer than 31 days")
+    setDayError("April cant be greater than 31 days")
   } else if (monthInput == 2 && dayInput > 29){
     setDayError('Must be a valid input')
   }
@@ -54,7 +55,6 @@ const monthError = () =>{
   }
 }
 
-
 const yearError = ()=>{
   if (yearInput > dateObj.year) {
     setYearError('Must be in the past')
@@ -64,10 +64,6 @@ const yearError = ()=>{
 }
 
 const onSubmit = () => {
-  // if (dayInput == "" || monthInput == ""|| yearInput == "") {
-  //   setError("Field is required");
-  // } else {
-  //   setError("");
     dayError();
     monthError()
     yearError()
@@ -119,7 +115,8 @@ const onSubmit = () => {
         onClick={onSubmit}
         />
       </div>
-      <div style={{
+     {
+       <div style={{
         color: 'hsl(0, 0%, 8%)',
         textAlign: 'start',
         fontSize: '25px',
@@ -127,22 +124,23 @@ const onSubmit = () => {
       }} className='reveal-date'>
         <p>
           <span style={style}>
-            {yearInput ? (dateObj.year-yearInput) : '--'}
-            </span> 
-            {(dateObj.year-yearInput) > 1 ?  'years' : 'year'}
+            {yearInput ? (year-yearInput) : '--'}
+            </span>
+            {(year-yearInput) > 1 ?  'years' : 'year'}
             </p>
         <p>
           <span style={style}>
-            {monthInput ? (dateObj.month -monthInput):'--'}
-            </span>{(dateObj.month-monthInput) > 1 ?  'months' : 'month'}
+            {monthInput ? (month -monthInput):'--'}
+            </span>{(month-monthInput) > 1 ?  'months' : 'month'}
             </p>
         <p>
           <span style={style}>
-            {dayInput ? dateObj.day - dayInput : '--'}
+            {dayInput ? (day - dayInput) : '--'}
           </span>
-          {dayInput ? (dateObj.day - dayInput === 1 ? ' day' : ' days') : ''}
+          {(day - dayInput === 1) ? ' day' : ' days'}
         </p>
       </div>
+     }
     </div>
     </>
   )
