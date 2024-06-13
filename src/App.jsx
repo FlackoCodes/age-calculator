@@ -31,10 +31,6 @@ const getDate = () => {
   const month = parseInt(monthInput) - dateObj.month;
   const year = parseInt(yearInput) - dateObj.year;
 
-  console.log(`Day difference: ${day}`);
-  console.log(`Month difference: ${month}`);
-  console.log(`Year difference: ${year}`);
-  console.log(dateObj.day, dateObj.month);
 };
 
 const dayError = () =>{
