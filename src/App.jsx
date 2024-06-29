@@ -1,76 +1,89 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import iconArrow from './images/icon-arrow.svg'
 
 
 function App() {
-  const [day_error, setDayError] = useState('');
-  const [month_error, setMonthError] = useState('');
-  const [year_error, setYearError] = useState('');
-  const [dayInput, setDayInput] = useState("");
-  const [monthInput, setMonthInput] = useState("");
-  const [yearInput, setYearInput] = useState("");
+  let [ days, setDays ] = useState('days');
+  let [ months, setMonths ] = useState('months');
+  let [ years, setYears ] = useState('years');
+  let [ day_error, setDayError ] = useState(false);
+  let [ month_error, setMonthError ] = useState(false);
+  let [ year_error, setYearError ] = useState(false);
+  let [ dayInput, setDayInput ] = useState("");
+  let [ monthInput, setMonthInput ] = useState("");
+  let [ yearInput, setYearInput ] = useState("");
 
-const handleOnChange = (e, setFunction) =>{
-  const inputItem = e.target.value;
+let handleOnChange = (e, setFunction) =>{
+  let inputItem = e.target.value;
   setFunction(inputItem)
 }
 
-const today = new Date();
+let today = new Date();
 
-const dateObj = {
+let dateObj = {
   day: today.getDate(),
   month: today.getMonth() + 1,
   year: today.getFullYear(),
 };
 
-const { day, month, year} = dateObj;
+let { day, month, year} = dateObj;
 
-const getDate = () => {
-
-  const day = parseInt(dayInput) - dateObj.day;
-  const month = parseInt(monthInput) - dateObj.month;
-  const year = parseInt(yearInput) - dateObj.year;
-
-};
-
-const dayError = () =>{
-  if (dayInput == ""){
-    setDayError('Field is required')
-  } else if(dayInput > 31){
-    setDayError('Must be a valid day')
-  } else if((monthInput == 4 || monthInput == 6 || monthInput == 9 || monthInput == 11) && dayInput > 30){
-    setDayError("April cant be greater than 31 days")
-  } else if (monthInput == 2 && dayInput > 29){
-    setDayError('Must be a valid input')
-  }
-}
-
-const monthError = () =>{
-  if (monthInput > 12 || monthError < 1) {
-    setMonthError('Must be a valid month')
-  }
-}
-
-const yearError = ()=>{
-  if (yearInput > dateObj.year) {
-    setYearError('Must be in the past')
-     } else if(yearInput == ""){
-      setYearError('Field is required')
+  function dayError() {
+    if (dayInput == "") {
+      setDayError('Field is required');
+    } else if (dayInput > 31) {
+      setDayError('Must be a valid day');
+    } else if ((monthInput == 4 || monthInput == 6 ||
+       monthInput == 9 || monthInput == 11) 
+      && dayInput > 30) {
+      setDayError("Must be a valid day");
+    } else if (monthInput == 2 && dayInput > 29) {
+      setDayError('Must be a valid input');
     }
-}
+  }
 
-const onSubmit = () => {
-    dayError();
+  function monthError() {
+    if (monthInput > 12 || monthError < 1) {
+      setMonthError('Must be a valid month');
+    } else if (monthInput == '') {
+      setMonthError('Field is required');
+    }
+  }
+
+  function yearError() {
+    if (yearInput > dateObj.year) {
+      setYearError('Must be in the past');
+    } else if (yearInput == "") {
+      setYearError('Field is required');
+    }
+  }
+
+  function calculateAge() {
+    if (day_error || month_error || year_error) {
+      setDays(days);
+      setMonths(months);
+      setYears(years);
+    } else {
+      console.log(day_error, month_error, year_error);
+      setDays((parseInt(dayInput - day) + ((days > 1) ? 'days' : 'day')));
+      setMonths(parseInt(monthInput - month) + ((months > 1) ? 'months' : 'month'));
+      setYears(parseInt(yearInput - year) + ((years > 1) ? 'years' : 'year'));
+    }
+  }
+
+  function onSubmit() {
+    dayError()
     monthError()
     yearError()
-    getDate();
+    calculateAge()
   }
-
+ 
   return (
     <>
     <div className="container">
       <div className="form">
-        <form action="" method="get">
+        <form>
               <div className="form-group">
                 <label htmlFor="day">DAY</label>
                 <input type="number"  id="day" placeholder='DD'
@@ -98,47 +111,29 @@ const onSubmit = () => {
           textAlign: 'center',
       }} className='hr-img'>
         <hr />
-        <img style={{
-          background:'hsl(259, 100%, 65%)',
-          borderRadius: '100%',
-          padding: '.1rem',
-          marginTop: '-40%',
-          width: '50px',
-          zIndex: 22,
-          position: 'relative',
-          cursor: 'pointer'
-        }} src={iconArrow} alt="icon-arrow" className='img-btn'
+        <img style={imgStyle} src={iconArrow} alt="icon-arrow" className='img-btn'
         onClick={onSubmit}
         />
       </div>
-       <div style={{
-        color: 'hsl(0, 0%, 8%)',
-        textAlign: 'start',
-        fontSize: '25px',
-        fontWeight: 800,
-      }} className='reveal-date'>
+       <div style={divStyle} className='reveal-date'>
        <div>
-        { (!day_error || !month_error || !year_error) ?
          <p>
             <span style={style}>
-              {yearInput ? (year-yearInput) : '--'}
               </span>
-              {(year-yearInput) > 1 ?  'years' : 'year'}
-              </p> : <p>
                 <span style={style}>--</span>
-                year
-                </p>}
+                {years}
+                </p>
        </div>
        <p>
           <span style={style}>
-            {monthInput ? (month -monthInput):'--'}
-            </span>{(month-monthInput) > 1 ?  'months' : 'month'}
+            --
+            </span>{months}
             </p>
         <p>
           <span style={style}>
-            {dayInput ? (day - dayInput) : '--'}
+            --
           </span>
-          {(day - dayInput === 1) ? ' day' : ' days'}
+          {days}
         </p>
       </div>
     </div>
@@ -146,16 +141,34 @@ const onSubmit = () => {
   )
 }
 
-const style = {
+let style = {
     color: 'hsl(259, 100%, 65%)',
     fontSize: '30px',
     fontWeight: 800
 }
 
-const emStyles = {
+let emStyles = {
   fontSize: '10px',
   fontWeight: '200',
   color: 'hsl(0, 100%, 67%)'
+}
+
+let imgStyle = {
+  background:'hsl(259, 100%, 65%)',
+  borderRadius: '100%',
+  padding: '.1rem',
+  marginTop: '-40%',
+  width: '50px',
+  zIndex: 22,
+  position: 'relative',
+  cursor: 'pointer'
+}
+
+let divStyle = {
+  color: 'hsl(0, 0%, 8%)',
+  textAlign: 'start',
+  fontSize: '25px',
+  fontWeight: 800
 }
 
 export default App
