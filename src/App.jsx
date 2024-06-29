@@ -4,81 +4,99 @@ import iconArrow from './images/icon-arrow.svg'
 
 
 function App() {
-  let [ days, setDays ] = useState('days');
-  let [ months, setMonths ] = useState('months');
-  let [ years, setYears ] = useState('years');
-  let [ day_error, setDayError ] = useState(false);
-  let [ month_error, setMonthError ] = useState(false);
-  let [ year_error, setYearError ] = useState(false);
-  let [ dayInput, setDayInput ] = useState("");
-  let [ monthInput, setMonthInput ] = useState("");
-  let [ yearInput, setYearInput ] = useState("");
+  const [days, setDays] = useState("days");
+  const [months, setMonths] = useState("months");
+  const [years, setYears] = useState("years");
+  const [dayError, setDayError] = useState("");
+  const [monthError, setMonthError] = useState("");
+  const [yearError, setYearError] = useState("");
+  const [dayInput, setDayInput] = useState("");
+  const [monthInput, setMonthInput] = useState("");
+  const [yearInput, setYearInput] = useState("");
 
-let handleOnChange = (e, setFunction) =>{
-  let inputItem = e.target.value;
-  setFunction(inputItem)
-}
+  const handleOnChange = (e, setFunction) => {
+    let inputItem = e.target.value;
+    setFunction(inputItem);
+  };
 
-let today = new Date();
+  let today = new Date();
+  let dateObj = {
+    day: today.getDate(),
+    month: today.getMonth() + 1,
+    year: today.getFullYear(),
+  };
 
-let dateObj = {
-  day: today.getDate(),
-  month: today.getMonth() + 1,
-  year: today.getFullYear(),
-};
+  let { day, month, year } = dateObj;
 
-let { day, month, year} = dateObj;
-
-  function dayError() {
-    if (dayInput == "") {
-      setDayError('Field is required');
+  function dayErrorCheck() {
+    if (dayInput === "") {
+      setDayError("Field is required");
+      return true;
     } else if (dayInput > 31) {
-      setDayError('Must be a valid day');
-    } else if ((monthInput == 4 || monthInput == 6 ||
-       monthInput == 9 || monthInput == 11) 
-      && dayInput > 30) {
       setDayError("Must be a valid day");
+      return true;
+    } else if (
+      (monthInput == 4 || monthInput == 6 || monthInput == 9 || monthInput == 11) &&
+      dayInput > 30
+    ) {
+      setDayError("Must be a valid day");
+      return true;
     } else if (monthInput == 2 && dayInput > 29) {
-      setDayError('Must be a valid input');
+      setDayError("Must be a valid input");
+      return true;
+    } else {
+      setDayError("");
+      return false;
     }
   }
 
-  function monthError() {
-    if (monthInput > 12 || monthError < 1) {
-      setMonthError('Must be a valid month');
-    } else if (monthInput == '') {
-      setMonthError('Field is required');
+  function monthErrorCheck() {
+    if (monthInput > 12 || monthInput < 1) {
+      setMonthError("Must be a valid month");
+      return true;
+    } else if (monthInput === "") {
+      setMonthError("Field is required");
+      return true;
+    } else {
+      setMonthError("");
+      return false;
     }
   }
 
-  function yearError() {
+  function yearErrorCheck() {
     if (yearInput > dateObj.year) {
-      setYearError('Must be in the past');
-    } else if (yearInput == "") {
-      setYearError('Field is required');
+      setYearError("Must be in the past");
+      return true;
+    } else if (yearInput === "") {
+      setYearError("Field is required");
+      return true;
+    } else {
+      setYearError("");
+      return false;
     }
   }
 
   function calculateAge() {
-    if (day_error || month_error || year_error) {
-      setDays(days);
-      setMonths(months);
-      setYears(years);
+    const dayErr = dayErrorCheck();
+    const monthErr = monthErrorCheck();
+    const yearErr = yearErrorCheck();
+
+    if (dayErr || monthErr || yearErr) {
+      setDays("days");
+      setMonths("months");
+      setYears("years");
     } else {
-      console.log(day_error, month_error, year_error);
-      setDays((parseInt(dayInput - day) + ((days > 1) ? 'days' : 'day')));
-      setMonths(parseInt(monthInput - month) + ((months > 1) ? 'months' : 'month'));
-      setYears(parseInt(yearInput - year) + ((years > 1) ? 'years' : 'year'));
+      setDays(parseInt(day - dayInput) + ((parseInt(day - dayInput) > 1) ? " days" : " day"));
+      setMonths(parseInt(month - monthInput) + ((parseInt(month - monthInput) > 1) ? " months" : " month"));
+      setYears(parseInt(year - yearInput) + ((parseInt(year - yearInput) > 1) ? " years" : " year"));
     }
   }
 
   function onSubmit() {
-    dayError()
-    monthError()
-    yearError()
-    calculateAge()
+    calculateAge();
   }
- 
+
+    
   return (
     <>
     <div className="container">
@@ -89,21 +107,21 @@ let { day, month, year} = dateObj;
                 <input type="number"  id="day" placeholder='DD'
                 onChange={(e)=>handleOnChange(e, setDayInput)}
                 />
-                <em style={emStyles}>{day_error}</em>
+                <em style={emStyles}>{dayError}</em>
               </div>
               <div className="form-group">
                 <label htmlFor="month">MONTH</label>
                 <input type="number" id="month" placeholder='MM'
                 onChange={(e)=>handleOnChange(e, setMonthInput)}
                 />
-                <em style={emStyles}>{month_error}</em>
+                <em style={emStyles}>{monthError}</em>
               </div>
               <div className="form-group">
                 <label htmlFor="year">YEAR</label>
                 <input type="number" id="year" placeholder='YYYY'
                 onChange={(e)=>handleOnChange(e, setYearInput)}
                 />
-                <em style={emStyles}>{year_error}</em>
+                <em style={emStyles}>{yearError}</em>
               </div>
         </form>
       </div>
@@ -140,6 +158,42 @@ let { day, month, year} = dateObj;
     </>
   )
 }
+
+  //   <div>
+  //     <input
+  //       type="number"
+  //       placeholder="Day"
+  //       value={dayInput}
+  //       onChange={(e) => handleOnChange(e, setDayInput)}
+  //     />
+  //     {dayError && <p>{dayError}</p>}
+
+  //     <input
+  //       type="number"
+  //       placeholder="Month"
+  //       value={monthInput}
+  //       onChange={(e) => handleOnChange(e, setMonthInput)}
+  //     />
+  //     {monthError && <p>{monthError}</p>}
+
+  //     <input
+  //       type="number"
+  //       placeholder="Year"
+  //       value={yearInput}
+  //       onChange={(e) => handleOnChange(e, setYearInput)}
+  //     />
+  //     {yearError && <p>{yearError}</p>}
+
+  //     <button onClick={onSubmit}>Calculate Age</button>
+
+  //     <div>
+  //       <p>{years}</p>
+  //       <p>{months}</p>
+  //       <p>{days}</p>
+  //     </div>
+  //   </div>
+  // );
+
 
 let style = {
     color: 'hsl(259, 100%, 65%)',
